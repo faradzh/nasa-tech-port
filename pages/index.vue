@@ -1,9 +1,3 @@
 <template>
-  <Projects :data="projects" />
+  <Projects />
 </template>
-
-<script setup lang="ts">
-import type { Project } from "~/components/types";
-
-const { data: projects } = useFetch<{ projects: Project[] }>("/api/projects");
-</script>

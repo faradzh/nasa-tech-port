@@ -2,7 +2,7 @@
   <li class="w-auto h-16 mb-2 bg-white shadow rounded-sm">
     <div class="flex justify-between pl-2 pr-2">
       <h3 class="max-w-96 truncate p-2 leading-12">
-        Project Title That Can Be Long
+        Project Title That Can Be Long: {{ project.projectId }}
       </h3>
       <NuxtLink
         :to="`/projects/${project.projectId}`"
@@ -17,17 +17,4 @@
 import type { Project } from "./types";
 
 const { project } = defineProps<{ project: Project }>();
-
-// const project = ref<Project>();
-
-// async function fetchProjectData() {
-//   const response = await $fetch<{ project: Project }>(
-//     `/api/projects/${data.projectId}`
-//   );
-//   project.value = response.project;
-// }
-
-// onMounted(() => {
-//   !data.title && fetchProjectData();
-// });
 </script>

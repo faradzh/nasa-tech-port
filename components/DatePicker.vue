@@ -1,20 +1,23 @@
 <template>
-  <VueDatePicker v-model="date"></VueDatePicker>
+  <VueDatePicker
+    v-model="updatedSince"
+    model-type="yyyy-MM-dd"
+    :format="format"
+  ></VueDatePicker>
 </template>
 
-<script>
-import { ref } from "vue";
+<script setup lang="ts">
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import { useAppStore } from "~/store/app";
 
-export default {
-  components: { VueDatePicker },
-  setup() {
-    const date = ref();
+const appStore = useAppStore();
+const { updatedSince } = storeToRefs(appStore);
 
-    return {
-      date,
-    };
-  },
+const format = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
 };
 </script>

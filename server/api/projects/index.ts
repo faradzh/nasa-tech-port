@@ -1,8 +1,10 @@
 import { Project } from "~/components/types";
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const { updatedSince } = getQuery(event);
+
   const { projects } = await $fetch<{ projects: Project[] }>(
-    "https://techport.nasa.gov/api/projects?updatedSince=2024-02-26"
+    `https://techport.nasa.gov/api/projects?updatedSince=${updatedSince}`
   );
 
   // const enhancedProjects = [
