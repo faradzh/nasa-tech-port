@@ -25,13 +25,13 @@
       {{ programManager.fullName }}
     </span>
   </section>
-  <section>
+  <section class="mb-4">
     <span class="font-bold">Project Managers: </span>
     <span v-for="projectManager in projectManagers">
       {{ projectManager.fullName }},
     </span>
   </section>
-  <h2 class="ml-auto leading-8 bg-green-300 pl-4 pr-4 rounded-sm">
+  <h2 class="max-w-32 leading-8 bg-green-300 pl-4 pr-4 rounded-sm">
     {{ project?.statusDescription }}
   </h2>
 </template>
