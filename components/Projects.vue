@@ -25,10 +25,12 @@
       </ProjectsList>
     </div>
     <div class="flex justify-between">
-      <div>
-        <PaginationDropdown />
-        <span> items per page</span>
-      </div>
+      <ClientOnly fallback-tag="div" fallback="Loading...">
+        <div>
+          <PaginationDropdown />
+          <span> items per page</span>
+        </div>
+      </ClientOnly>
       <div>{{ `Page ${currentPage} of ${totalPages}` }}</div>
       <div>
         <button
@@ -54,8 +56,12 @@
 import { useAppStore } from "~/store/app";
 import type { Project } from "./types";
 import { usePagination } from "~/hooks";
+import { isValid, parse, format } from "date-fns";
 
 const appStore = useAppStore();
+const router = useRouter();
+const currentRoute = useRoute();
+
 const { updatedSince, itemsPerPage } = storeToRefs(appStore);
 const {
   currentPage,
@@ -68,14 +74,39 @@ const {
 
 const yesterday = ref(new Date(new Date().setDate(new Date().getDate() - 1)));
 
-const { data, pending, error } = await useLazyFetch<{ projects: Project[] }>(
-  `/api/projects`,
-  {
-    query: {
-      updatedSince,
-    },
+const computedDate = computed(() => {
+  if (currentRoute.query.updatedSince) {
+    const parsedDate = parse(
+      currentRoute.query.updatedSince as string,
+      "yyyy-MM-dd",
+      new Date()
+    );
+    if (isValid(parsedDate)) {
+      return format(parsedDate, "yyyy-MM-dd");
+    }
   }
-);
+  return "2024-02-27"; //fallback
+});
+
+const { data, pending, error } = await useLazyFetch<{
+  projects: Project[];
+}>(`/api/projects`, {
+  query: {
+    updatedSince: computedDate,
+  },
+});
+
+const validPaginationOptions = [10, 25, 50];
+onMounted(() => {
+  const { itemsPerPage } = currentRoute.query;
+
+  if (itemsPerPage && validPaginationOptions.includes(Number(itemsPerPage))) {
+    appStore.setItemsPerPage(Number(itemsPerPage));
+  }
+
+  updateTotalPages(data.value?.projects.length ?? 1);
+  appStore.setUpdatedSince(computedDate.value);
+});
 
 watch(data, () => {
   updatePagination();
@@ -83,6 +114,16 @@ watch(data, () => {
 
 watch(itemsPerPage, () => {
   updatePagination();
+  router.push({
+    query: { ...currentRoute.query, itemsPerPage: itemsPerPage.value },
+  });
+});
+//
+
+watch(updatedSince, () => {
+  router.push({
+    query: { ...currentRoute.query, updatedSince: updatedSince.value },
+  });
 });
 
 function updatePagination() {

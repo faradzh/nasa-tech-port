@@ -3,6 +3,8 @@ import { Project } from "~/components/types";
 export default defineEventHandler(async (event) => {
   const { updatedSince } = getQuery(event);
 
+  console.log("updatedSinceQuery", updatedSince);
+
   const { projects } = await $fetch<{ projects: Project[] }>(
     `https://techport.nasa.gov/api/projects?updatedSince=${updatedSince}`
   );
