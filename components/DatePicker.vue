@@ -14,7 +14,7 @@ import { useAppStore } from "~/store/app";
 const appStore = useAppStore();
 const { updatedSince } = storeToRefs(appStore);
 
-const format = (date) => {
+const format = (date: Date) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
