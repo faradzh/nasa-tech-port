@@ -24,8 +24,15 @@
         />
       </ProjectsList>
     </div>
-    <div class="flex justify-between">
-      <ClientOnly fallback-tag="div" fallback="Loading...">
+    <Pagination
+      :data="{
+        currentPage,
+        totalPages,
+        prevPage,
+        nextPage,
+      }"
+    />
+    <!-- <ClientOnly fallback-tag="div" fallback="Loading...">
         <div>
           <PaginationDropdown />
           <span> items per page</span>
@@ -47,8 +54,7 @@
         >
           Next
         </button>
-      </div>
-    </div>
+      </div> -->
   </div>
 </template>
 
