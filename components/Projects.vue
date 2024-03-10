@@ -32,29 +32,6 @@
         nextPage,
       }"
     />
-    <!-- <ClientOnly fallback-tag="div" fallback="Loading...">
-        <div>
-          <PaginationDropdown />
-          <span> items per page</span>
-        </div>
-      </ClientOnly>
-      <div>{{ `Page ${currentPage} of ${totalPages}` }}</div>
-      <div>
-        <button
-          class="bg-red-400 text-white pl-2 pr-2 rounded-sm mr-2"
-          @click="prevPage"
-          :disabled="currentPage === 1"
-        >
-          Previous
-        </button>
-        <button
-          class="bg-red-400 text-white pl-2 pr-2 rounded-sm"
-          @click="nextPage"
-          :disabled="currentPage === totalPages"
-        >
-          Next
-        </button>
-      </div> -->
   </div>
 </template>
 
@@ -63,6 +40,7 @@ import { useAppStore } from "~/store/app";
 import type { Project } from "./types";
 import { usePagination } from "~/hooks";
 import { isValid, parse, format } from "date-fns";
+import { sevenDaysAgo } from "./utils";
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -91,7 +69,7 @@ const computedDate = computed(() => {
       return format(parsedDate, "yyyy-MM-dd");
     }
   }
-  return "2024-02-27"; //fallback
+  return sevenDaysAgo; // fallback
 });
 
 const { data, pending, error } = await useLazyFetch<{

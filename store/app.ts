@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import type { Project } from "~/components/types";
+import { sevenDaysAgo } from "~/components/utils";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
-    updatedSince: "2024-02-27",
+    updatedSince: sevenDaysAgo,
     itemsPerPage: 10,
   }),
   actions: {
